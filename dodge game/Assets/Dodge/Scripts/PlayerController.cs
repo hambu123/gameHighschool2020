@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float m_Speed = 25f;
+    public float m_Speed = 15f;
     // Update is called once per frame
     void Update()
     {
@@ -16,10 +16,11 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(new Vector3(xAxis, 0, yAxis) * m_Speed);    
 
         //Geaxis fire   사망처리 해보자.`
-        float fireAxis = Input.GetAxis("Firel");
+       // float fireAxis = Input.GetAxis("Firel");
+       //
+       // if (fireAxis > 0.95f)
+        //    Die();
 
-        if (fireAxis > 0.95f)
-            Die();
     }
 
 
