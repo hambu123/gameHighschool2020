@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     public float m_Speed = 15f;
     // Update is called once per frame
+    private void Start()
+    {
+        
+    }
     void Update()
     {
         Rigidbody rigidbody = /*gameObject.*/GetComponent<Rigidbody>();
@@ -23,10 +28,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public GameManager m_GameManger;
 
     public void Die()
     {
         Debug.Log("사망");
-        gameObject.SetActive(false);
+        //gameObject.setAcitce
+        m_GameManger.GameOver();
     }
 }

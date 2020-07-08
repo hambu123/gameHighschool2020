@@ -487,8 +487,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uAC8C\uC784\uC624\uBC84\n\uB2E4\uC2DC\uC2DC\uC791\uD558\uC2DC\uB824\uBA74
-    R\uB20C\uB7EC"
+  m_Text: 'Game Over
+
+    ReStarts '' R '''
 --- !u!222 &197839750
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -566,7 +567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'score : 10000'
+  m_Text: 'score : 0'
 --- !u!222 &615674330
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1176,6 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a7070427defc09448194930e20f7d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_GameManger: {fileID: 0}
   m_ScoreUI: {fileID: 615674329}
   m_RestartUI: {fileID: 197839749}
   m_PlayerController: {fileID: 1550641482}
@@ -1859,6 +1861,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6254226872939716608, guid: a17c15ff906bb914188d31d0a45470c0,
+        type: 3}
+      propertyPath: m_Speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6254226872939716608, guid: a17c15ff906bb914188d31d0a45470c0,
+        type: 3}
+      propertyPath: m_GameManger
+      value: 
+      objectReference: {fileID: 1580040163}
     - target: {fileID: 6254226872939716609, guid: a17c15ff906bb914188d31d0a45470c0,
         type: 3}
       propertyPath: m_LocalPosition.x
