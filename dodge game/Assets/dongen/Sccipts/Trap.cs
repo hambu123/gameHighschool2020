@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Trap : MonoBehaviour
 {
+    public UnityEvent m_OnEnter;
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -13,7 +16,7 @@ public class Trap : MonoBehaviour
             var player = other.attachedRigidbody
                 .GetComponent<PlayerControllrrDongen>();
             if (player != null)
-                player.Die();
+                m_OnEnter.Invoke();
         }
     }
 

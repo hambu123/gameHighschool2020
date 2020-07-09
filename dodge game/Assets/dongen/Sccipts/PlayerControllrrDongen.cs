@@ -25,7 +25,8 @@ public class PlayerControllrrDongen : MonoBehaviour
 
     public void Die()
     {
-        Destroy(gameObject);
+        GameManger_Dongen gameManger = FindObjectOfType<GameManger_Dongen>();
+        gameManger.ReturnToStartPoint();
     }
 
 }
