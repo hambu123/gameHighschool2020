@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemySmall : MonoBehaviour
 {
     public float m_Speed = 3f ;
+    public GameManager instance;
 
     public Bullet m_Bullet;
 
@@ -42,6 +43,8 @@ public class EnemySmall : MonoBehaviour
         if(collision.tag == "PlayerBullet")
         {
             m_Animator.SetBool("Die", true);
+
+            GameManager.instance.AddScore();
             isDead = true;
         }
     }
