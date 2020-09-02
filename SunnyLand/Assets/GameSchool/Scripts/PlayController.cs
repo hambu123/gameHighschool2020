@@ -11,6 +11,9 @@ public class PlayController : MonoBehaviour
     public float m_YJumpPower = 3f;
     bool jumpbool;
 
+    public bool m_ISTouchLadder = false;
+    public bool m_m_ISClimbing = false;
+    public float m_ClimbSpeed = 2f;
     public bool m_IsJumping = false;
 
     protected void Start()
@@ -23,34 +26,69 @@ public class PlayController : MonoBehaviour
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
 
-        Vector2 velocity = m_Rigidbody2D.velocity;
-        velocity.x = xAxis * m_XAxisSpeed;
-        m_Rigidbody2D.velocity = velocity;
-
-    
-        if (Input.GetKeyDown(KeyCode.Space) &&jumpbool)
+        if(m_ISTouchLadder == true
+            && Mathf.Abs(yAxis) > 0.5f)
         {
-            m_Rigidbody2D.AddForce(Vector3.up * m_YJumpPower);
-            jumpbool = false;
+            m_m_ISClimbing = true;
         }
-        if(Input.GetKeyDown(KeyCode.RightArrow))
+        if ( ! m_m_ISClimbing)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            Vector2 velocity = m_Rigidbody2D.velocity;
+            velocity.x = xAxis * m_XAxisSpeed;
+            m_Rigidbody2D.velocity = velocity;
+            if (Input.GetKeyDown(KeyCode.Space) && jumpbool)
+            {
+                m_Rigidbody2D.AddForce(Vector3.up * m_YJumpPower);
+                jumpbool = false;
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            var animator = GetComponent<Animator>();
+            animator.SetFloat("VelocityY", velocity.y);
+            m_IsJumping = Mathf.Abs(velocity.y) >= 0.1f ? true : false;
+            m_Animator.SetBool("isJumping", m_IsJumping);
+            m_Animator.SetFloat("VelocityX", Mathf.Abs(xAxis));
+            m_Animator.SetFloat("Velocity", velocity.y);
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            //사다리 타는 도중의 이동기능
+            m_Rigidbody2D.constraints =
+                m_Rigidbody2D.constraints | RigidbodyConstraints2D.FreezePosition;
+
+                
+            Vector3 movement = Vector3.zero;
+            movement.x = xAxis * m_ClimbSpeed * Time.deltaTime;
+            movement.y = yAxis * m_ClimbSpeed * Time.deltaTime;
+
+            transform.position += movement;
+
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                ClimbingExit();
+            }
         }
+        // update 사다리타기 점프 캔슬하는데
+        //여기랑
+        m_Animator.SetBool("IsClimbing", m_m_ISClimbing);
+        m_Animator.SetFloat("ClimbingSpeed",
+            Mathf.Abs(xAxis) + Mathf.Abs(yAxis));
 
-        var animator = GetComponent<Animator>();
-        animator.SetFloat("VelocityY", velocity.y);
+        
+    }
 
-        m_IsJumping = Mathf.Abs(velocity.y) >= 0.1f ? true : false;
-
-        m_Animator.SetBool("isJumping", m_IsJumping);
-        m_Animator.SetFloat("VelocityX", Mathf.Abs(xAxis));
-
-        m_Animator.SetFloat("Velocity", velocity.y);
+    private void ClimbingExit()
+    {
+        m_Rigidbody2D.constraints =
+            m_Rigidbody2D.constraints
+            & ~RigidbodyConstraints2D.FreezePosition;
+        m_m_ISClimbing = false;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -59,4 +97,26 @@ public class PlayController : MonoBehaviour
             jumpbool = true;
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Ladder")
+        {
+            m_ISTouchLadder = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Ladder")
+        {
+            m_ISTouchLadder = false;
+
+            ClimbingExit();
+        }
+    }
+   
+    /*if(! m_IsClimbing)
+        {
+
+        }*/
+
 }
