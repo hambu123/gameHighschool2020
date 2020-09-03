@@ -103,6 +103,13 @@ public class PlayController : MonoBehaviour
         {
             m_ISTouchLadder = true;
         }
+        else if(collision.tag == "Item")
+        {
+            var item = collision.
+                GetComponent<ItemComponet>();
+            if (item != null)
+                item.BeAte();
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -113,6 +120,7 @@ public class PlayController : MonoBehaviour
             ClimbingExit();
         }
     }
+
    
     /*if(! m_IsClimbing)
         {
