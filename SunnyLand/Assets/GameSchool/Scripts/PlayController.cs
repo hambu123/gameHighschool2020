@@ -96,6 +96,22 @@ public class PlayController : MonoBehaviour
         {
             jumpbool = true;
         }
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                jumpbool = true;
+
+                if (contact.rigidbody)
+                {
+                    var hp = contact.rigidbody.GetComponent<HpComponent>();
+                    if (hp)
+                    {
+                        Destroy(hp.gameObject);
+                    }
+                }
+            }
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -121,7 +137,9 @@ public class PlayController : MonoBehaviour
         }
     }
 
-   
+                                                                                                                                                         
+
+
     /*if(! m_IsClimbing)
         {
 
