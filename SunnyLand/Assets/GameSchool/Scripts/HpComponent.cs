@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Rigidbody2D))]
+
 public class HpComponent : MonoBehaviour
 {
     public UnityEvent m_OnDie;

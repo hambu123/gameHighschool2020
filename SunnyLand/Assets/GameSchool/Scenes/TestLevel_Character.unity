@@ -6156,6 +6156,7 @@ GameObject:
   - component: {fileID: 713513801}
   - component: {fileID: 713513803}
   - component: {fileID: 713513804}
+  - component: {fileID: 713513805}
   m_Layer: 0
   m_Name: Sunny
   m_TagString: Untagged
@@ -6192,7 +6193,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713513800}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -44.45, y: -2.45, z: 0}
+  m_LocalPosition: {x: -11.64, y: 3.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 127107883}
@@ -6238,6 +6239,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &713513805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713513800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2375aaeff5e9124fa56113846ac5871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OnDie:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnTakeHeal:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &920837767
 GameObject:
   m_ObjectHideFlags: 0
@@ -15767,6 +15789,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00cd952a4d1652d4c8939904856d099e, type: 3}
+--- !u!114 &2037772289 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+    type: 3}
+  m_PrefabInstance: {fileID: 7412647899538377509}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2375aaeff5e9124fa56113846ac5871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2766368291914798555
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15902,6 +15936,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BaseEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2037772289}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DestroySelf
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412647899047408607, guid: 9c125a2be00ffef40802d6894aa0b376,
+        type: 3}
+      propertyPath: m_OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c125a2be00ffef40802d6894aa0b376, type: 3}

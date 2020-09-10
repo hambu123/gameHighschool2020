@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 7412647899047408601}
   - component: {fileID: 7412647899047408606}
   - component: {fileID: 7412647899047408607}
+  - component: {fileID: 7203458102805774949}
+  - component: {fileID: 4312003811575330327}
   m_Layer: 0
   m_Name: BaseEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,10 +74,50 @@ MonoBehaviour:
       m_Calls: []
   m_OnTakeDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7412647899047408607}
+        m_MethodName: DestroySelf
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTakeHeal:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7203458102805774949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7412647899047408604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fa6a8dcafdb774a81bb9b507f05485, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectPrefab: {fileID: 8389897989885216038, guid: bb0558e61801dee408d53d1e3db9052b,
+    type: 3}
+--- !u!114 &4312003811575330327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7412647899047408604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76d8ae1695b537f4295ffa950bb02656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PatrolPos: {x: 0, y: 0, z: 0}
+  m_PatrolTerm: 2
+  m_Go: 1
 --- !u!1 &7412647900841960209
 GameObject:
   m_ObjectHideFlags: 0
