@@ -16,6 +16,7 @@ public class PlayController : MonoBehaviour
     public float m_ClimbSpeed = 2f;
     public bool m_IsJumping = false;
 
+    public float m_HitRecoveringTime = 0;
     protected void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -25,6 +26,20 @@ public class PlayController : MonoBehaviour
     {
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
+
+        m_HitRecoveringTime -= Time.deltaTime;
+        if (m_HitRecoveringTime > 0)
+        {
+            ClimbingExit();
+
+            m_Animator.SetBool("TakingDamage", true);
+            return;
+        }
+        else
+        {
+            m_Animator.SetBool("TakingDamage", false);
+            
+        }
 
         if(m_ISTouchLadder == true
             && Mathf.Abs(yAxis) > 0.5f)
@@ -116,6 +131,8 @@ public class PlayController : MonoBehaviour
             {
                 var hp = GetComponent<HpComponent>();
                 hp.TakeDamage(10);
+
+                m_HitRecoveringTime = 2f;
 
                 m_Animator.SetTrigger("TakeDamage");
             }

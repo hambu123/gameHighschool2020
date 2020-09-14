@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 public class HpComponent : MonoBehaviour
 {
+    public int m_HP = 10;
     public UnityEvent m_OnDie;
     public UnityEvent m_OnTakeDamage;
     public UnityEvent m_OnTakeHeal;
@@ -14,6 +15,12 @@ public class HpComponent : MonoBehaviour
     public virtual void TakeDamage(int damage)
     {
         m_OnTakeDamage.Invoke();
+
+        m_HP -= damage;
+        if(m_HP <= 0)
+        {
+            m_OnDie.Invoke();
+        }
     }
 
     public void DestroySelf()
