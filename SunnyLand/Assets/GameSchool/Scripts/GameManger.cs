@@ -18,6 +18,10 @@ public class GameManger : MonoBehaviour
 
     public bool m_IsGameOver;
     public GameObject m_GameOverUI;
+
+    public VariableJoystick m_JoyStick;
+
+    public UnityEngine.UI.Button m_JumpButton;
  
 
     public void Start()
@@ -67,6 +71,13 @@ public class GameManger : MonoBehaviour
         hpComponent.m_OnDie.AddListener(GameOver);
 
         m_JointArm.m_Target = playerInstance.transform;
+
+        var playerController = playerInstance.transform
+            .GetComponent<PlayController>();
+        playerController.m_Joystick = m_JoyStick;
+
+        m_JumpButton.onClick.AddListener(
+            playerController.Jump);
     }
 
     public void GameClear()

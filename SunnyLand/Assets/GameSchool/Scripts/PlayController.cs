@@ -9,7 +9,7 @@ public class PlayController : MonoBehaviour
 
     public float m_XAxisSpeed = 3f;
     public float m_YJumpPower = 3f;
-    bool jumpbool;
+    public int m_JumpCount = 0;
 
     public bool m_ISTouchLadder = false;
     public bool m_m_ISClimbing = false;
@@ -22,10 +22,28 @@ public class PlayController : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         m_Animator = GetComponent<Animator>();
     }
+
+    private bool m_InputJump = false;
+
+    public void Jump()
+    {
+        m_InputJump = true;
+    }
+
+    public VariableJoystick m_Joystick;
+
+    public UnityEngine.UI.Button m_JumpButton;
+
     protected void Update()
     {
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
+
+        xAxis += m_Joystick.Horizontal;
+        yAxis += m_Joystick.Vertical;
+
+        var InputJump = m_InputJump;
+        m_InputJump = false;
 
         m_HitRecoveringTime -= Time.deltaTime;
         if (m_HitRecoveringTime > 0)
@@ -51,16 +69,18 @@ public class PlayController : MonoBehaviour
             Vector2 velocity = m_Rigidbody2D.velocity;
             velocity.x = xAxis * m_XAxisSpeed;
             m_Rigidbody2D.velocity = velocity;
-            if (Input.GetKeyDown(KeyCode.Space) && jumpbool)
+            if ((Input.GetKeyDown(KeyCode.Space)
+                || InputJump)
+                && m_JumpCount <= 0)
             {
                 m_Rigidbody2D.AddForce(Vector3.up * m_YJumpPower);
-                jumpbool = false;
+                m_JumpCount++;
             }
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (xAxis >= 0 )
             {
                 transform.localScale = new Vector3(1, 1, 1);
             }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            else 
             {
                 transform.localScale = new Vector3(-1, 1, 1);
             }
@@ -84,7 +104,8 @@ public class PlayController : MonoBehaviour
 
             transform.position += movement;
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space)
+                || InputJump)
             {
                 ClimbingExit();
             }
@@ -109,13 +130,13 @@ public class PlayController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
-            jumpbool = true;
+            m_JumpCount = 0;
         }
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal.y > 0.5f)
             {
-                jumpbool = true;
+                m_JumpCount = 0;
 
                 if (contact.rigidbody)
                 {
