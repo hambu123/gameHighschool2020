@@ -15,10 +15,10 @@ TagManager:
   - 
   - Movement
   - SideBlock
-  - 
-  - 
-  - 
-  - 
+  - Background
+  - Middleground
+  - Plane
+  - Character
   - 
   - 
   - 
@@ -40,4 +40,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2954444097
+    locked: 0
+  - name: Middleground
+    uniqueID: 1483594961
+    locked: 0
+  - name: Plane
+    uniqueID: 331884061
+    locked: 0
+  - name: Charater
+    uniqueID: 2846782351
     locked: 0
