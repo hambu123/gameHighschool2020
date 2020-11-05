@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 // 총을 구현한다
 public class Gun : MonoBehaviour {
@@ -38,29 +39,63 @@ public class Gun : MonoBehaviour {
 
     private void Awake() {
         // 사용할 컴포넌트들의 참조를 가져오기
+        bulletLineRenderer = GetComponent<LineRenderer>();
+        gunAudioPlayer = GetComponent<AudioSource>(); 
     }
 
     private void OnEnable() {
         // 총 상태 초기화
     }
 
+    [ContextMenu("Fire")]
     // 발사 시도
     public void Fire() {
+        if (lastFireTime + timeBetFire <= Time.time)
+        {
+            Shot();
 
+            lastFireTime = Time.time;
+        }
+       
     }
-
     // 실제 발사 처리
-    private void Shot() {
-        
+    private void Shot()
+    {
+
+    RaycastHit hitInfo;
+        bool isHit = Physics.Raycast(fireTransform.position, fireTransform.forward, out hitInfo, fireDistance);
+
+        Vector3 hitPosition;
+        if (isHit)
+        {
+            hitPosition = hitInfo.point;
+        }
+        else
+        {
+            hitPosition = fireTransform.position + fireTransform.forward * fireDistance;
+        }
+
+        StartCoroutine(ShotEffect(hitPosition));
     }
 
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다
     private IEnumerator ShotEffect(Vector3 hitPosition) {
+
+        //총알 궤적에 대한 이펙트가 정 위치에 보입니다.
+        List<Vector3> linePoint = new List<Vector3>();
+        linePoint.Add(fireTransform.position);
+        linePoint.Add(hitPosition);
+
+        bulletLineRenderer.SetPositions(linePoint.ToArray());
+
+        muzzleFlashEffect.Play();
+
         // 라인 렌더러를 활성화하여 총알 궤적을 그린다
         bulletLineRenderer.enabled = true;
 
         // 0.03초 동안 잠시 처리를 대기
         yield return new WaitForSeconds(0.03f);
+        shellEjectEffect.Play();
 
         // 라인 렌더러를 비활성화하여 총알 궤적을 지운다
         bulletLineRenderer.enabled = false;
