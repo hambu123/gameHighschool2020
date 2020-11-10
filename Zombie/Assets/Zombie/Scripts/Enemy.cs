@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI; // AI, 내비게이션 시스템 관련 코드를 가져오기
 
