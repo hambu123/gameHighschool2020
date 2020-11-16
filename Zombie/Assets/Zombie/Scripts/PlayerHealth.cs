@@ -4,6 +4,7 @@ using UnityEngine.UI; // UI 관련 코드
 // 플레이어 캐릭터의 생명체로서의 동작을 담당
 public class PlayerHealth : LivingEntity {
     public Image healthSlider; // 체력을 표시할 UI 슬라이더
+    //public Slider healthSlider; // 체력을 표시할 UI 슬라이더
 
     public AudioClip deathClip; // 사망 소리
     public AudioClip hitClip; // 피격 소리
@@ -15,7 +16,7 @@ public class PlayerHealth : LivingEntity {
     private PlayerMovement playerMovement; // 플레이어 움직임 컴포넌트
     private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
 
-    public GameObject blold;
+    public GameObject bloodEffect;
 
     private void Awake() {
         // 사용할 컴포넌트를 가져오기
@@ -29,7 +30,7 @@ public class PlayerHealth : LivingEntity {
         // LivingEntity의 OnEnable() 실행 (상태 초기화)
         base.OnEnable();
 
-        Refreshhp();
+        RefreshHP();
 
         playerMovement.enabled = true;
         playerShooter.enabled = true;
@@ -39,7 +40,8 @@ public class PlayerHealth : LivingEntity {
     public override void RestoreHealth(float newHealth) {
         // LivingEntity의 RestoreHealth() 실행 (체력 증가)
         base.RestoreHealth(newHealth);
-        Refreshhp();
+
+        RefreshHP();
     }
 
     // 데미지 처리
@@ -47,25 +49,26 @@ public class PlayerHealth : LivingEntity {
         // LivingEntity의 OnDamage() 실행(데미지 적용)
         base.OnDamage(damage, hitPoint, hitDirection);
 
-        var b = Instantiate(blold);
-        b.transform.position = hitPoint;
-        b.transform.forward = hitDirection;
-        b.GetComponent<ParticleSystem>().Play();
+        var effect = Instantiate(bloodEffect);
+        effect.transform.position = hitPoint;
+        effect.transform.forward = hitDirection;
+        effect.GetComponent<ParticleSystem>().Play();
 
-        Refreshhp();
+        RefreshHP();
 
-        playerAudioPlayer.clip = hitClip;
-        playerAudioPlayer.Play();
+        if(!dead)
+        {
+            playerAudioPlayer.clip = hitClip;
+            playerAudioPlayer.Play();
+        }
     }
 
     // 사망 처리
     public override void Die() {
         // LivingEntity의 Die() 실행(사망 적용)
         base.Die();
-
         playerAudioPlayer.clip = deathClip;
         playerAudioPlayer.Play();
-
         playerAnimator.SetTrigger("Die");
 
         playerMovement.enabled = false;
@@ -76,14 +79,18 @@ public class PlayerHealth : LivingEntity {
         // 아이템과 충돌한 경우 해당 아이템을 사용하는 처리
     }
 
-    public void Refreshhp()
+    private void RefreshHP()
     {
-        healthSlider.fillAmount = health / startingHealth;
+        healthSlider.fillAmount 
+            = health / startingHealth;
     }
 
-    [ContextMenu("hit")]
-    public void testhit()
+
+    [ContextMenu("TestHit")]
+    public void TestHit()
     {
-        OnDamage(10, transform.position + Vector3.up,transform.forward);
+        OnDamage(10, 
+            transform.position + Vector3.up, 
+            transform.forward);
     }
 }

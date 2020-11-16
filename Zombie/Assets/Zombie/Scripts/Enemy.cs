@@ -125,6 +125,9 @@ public class Enemy : LivingEntity
         //임시 : 플레이어릐 공격이 사망시 관통할 수있게 충동체를 제거하고, 충돌체 제거시 중력에 의해 떨어지는 현상을 제가함
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Collider>().enabled = false;
+
+        GameManager.instance.AddScore(100);
+        FindObjectOfType<EnemySpawner>().RemoveEnemy(this);
     }
 
     private void OnTriggerStay(Collider other)

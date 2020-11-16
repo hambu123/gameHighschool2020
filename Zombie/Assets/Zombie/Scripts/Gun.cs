@@ -1,11 +1,13 @@
 ﻿using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 // 총을 구현한다
-public class Gun : MonoBehaviour {
+public class Gun : MonoBehaviour
+{
     // 총의 상태를 표현하는데 사용할 타입을 선언한다
-    public enum State {
+    public enum State
+    {
         Ready, // 발사 준비됨
         Empty, // 탄창이 빔
         Reloading // 재장전 중
@@ -37,41 +39,48 @@ public class Gun : MonoBehaviour {
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
 
-    private void Awake() {
+    private void Awake()
+    {
         // 사용할 컴포넌트들의 참조를 가져오기
         bulletLineRenderer = GetComponent<LineRenderer>();
-        gunAudioPlayer = GetComponent<AudioSource>(); 
+        gunAudioPlayer = GetComponent<AudioSource>();
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         // 총 상태 초기화
+        //탄창 크기에 맞춰 탄창에 총알을 가득채운다.
         magAmmo = magCapacity;
+        bulletLineRenderer.enabled = false;
     }
 
-    [ContextMenu("Fire")]
     // 발사 시도
-    public void Fire() {
-        //탄창에 총알이 맞았다면
+    [ContextMenu("Fire")]
+
+    public void Fire()
+    {
+        //마지막으로 총을 쏜시간 + 공격딜레이 보다 현재 시간이 더 오래되었으면
         if (lastFireTime + timeBetFire <= Time.time)
         {
             if (magAmmo > 0)
             {
-                Shot();
+                if (state == State.Ready)
+                    Shot();
 
-                //총알을 쏠때마다 탄창의 총알은 1씩 소모
+                //총알을 쏠떄마다 탄창의 총알은 1씩 소모
                 magAmmo -= 1;
 
-                //마지막으로 총을 쏜 시간은 현재
+                //마지막으로 총을 쏜 시간은 현재.
                 lastFireTime = Time.time;
             }
 
         }
     }
+
     // 실제 발사 처리
     private void Shot()
     {
-
-    RaycastHit hitInfo;
+        RaycastHit hitInfo;
         bool isHit = Physics.Raycast(fireTransform.position, fireTransform.forward, out hitInfo, fireDistance);
 
         Vector3 hitPosition;
@@ -89,7 +98,6 @@ public class Gun : MonoBehaviour {
             {
                 damageable.OnDamage(damage, hitPosition, hitInfo.normal);
             }
-           
         }
         else
         {
@@ -100,7 +108,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다
-    private IEnumerator ShotEffect(Vector3 hitPosition) {
+    private IEnumerator ShotEffect(Vector3 hitPosition)
+    {
 
         //총알 궤적에 대한 이펙트가 정 위치에 보입니다.
         List<Vector3> linePoint = new List<Vector3>();
@@ -109,13 +118,18 @@ public class Gun : MonoBehaviour {
 
         bulletLineRenderer.SetPositions(linePoint.ToArray());
 
+        //총구에서 화염과 슈팅 소리가 난다.
         muzzleFlashEffect.Play();
+        gunAudioPlayer.clip = shotClip;
+        gunAudioPlayer.Play();
 
         // 라인 렌더러를 활성화하여 총알 궤적을 그린다
         bulletLineRenderer.enabled = true;
 
         // 0.03초 동안 잠시 처리를 대기
         yield return new WaitForSeconds(0.03f);
+
+        //탄피가 배출된다.
         shellEjectEffect.Play();
 
         // 라인 렌더러를 비활성화하여 총알 궤적을 지운다
@@ -125,51 +139,59 @@ public class Gun : MonoBehaviour {
     // 재장전 시도
     public bool Reload()
     {
-        //탄창에 총알이 전부 채워져 있다면 false리턴
+
+        //탄창에 총알이 전부 채워져 있다면,false리턴
         if (magAmmo >= magCapacity)
         {
             return false;
         }
-        //총알이 전부 채워져 있지 않다면
+        else if (ammoRemain <= 0)
+        {
+            return false;
+        }
+
+        //탄창에 총알이 전부 채워져 있지 않다면
         else
         {
-            //탄창에 총알을 채워넣는다/
-            //그리고 true 리턴
+            //탄창에 총알을 채워넣는다
+            //그리도 true 리턴
+            StartCoroutine(ReloadRoutine());
 
-            //탄창에 넣어야할 총알수(탄창크기 - 현재 탄창의 총알 수)
-            int requiredAmmo = magCapacity - magAmmo;
-
-            //남아있는 총알수가
-            //탄창에 넣어야할 총알 수보다 크다면
-            if (ammoRemain >= requiredAmmo)
-            {
-                //탄창을 꽉채우고
-                magAmmo = magCapacity;
-                ammoRemain = 0;
-            }
-            //만약 그렇지 않다면
-            else
-            {
-                //탄창에는 남아있는 총알 수 만큼 탄창을 채운다.
-                magAmmo = ammoRemain;
-                ammoRemain = 0;
-            }
-
-
-            
             return true;
         }
     }
 
     // 실제 재장전 처리를 진행
-    private IEnumerator ReloadRoutine() {
+    private IEnumerator ReloadRoutine()
+    {
         // 현재 상태를 재장전 중 상태로 전환
         state = State.Reloading;
-        
+
         // 재장전 소요 시간 만큼 처리를 쉬기
         yield return new WaitForSeconds(reloadTime);
 
+        //남아있는 총알 수 (ammoRemain)가 "탄창에 넣어야할 총알 수()"보다 크다면
+        int reqiredAmmo = magCapacity - magAmmo;
+        if (ammoRemain >= reqiredAmmo)
+        {
+            //탄창을 꽉채우고
+            magAmmo = magCapacity;
+            ammoRemain -= reqiredAmmo;
+        }
+        else
+        {
+            //만약 그렇지 않다면
+            //탄창에는 남아있는 총알 수 만큼 탄창을 채운다.
+            magAmmo = ammoRemain;
+            ammoRemain = 0;
+        }
+
         // 총의 현재 상태를 발사 준비된 상태로 변경
         state = State.Ready;
+    }
+
+    private void Update()
+    {
+        UIManager.instance.UpdateAmmoText(magAmmo, ammoRemain);
     }
 }
