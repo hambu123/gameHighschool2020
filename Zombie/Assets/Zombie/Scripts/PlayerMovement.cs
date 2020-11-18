@@ -33,7 +33,6 @@ public class PlayerMovement : MonoBehaviour {
         var forward = Camera.main.transform.forward;
         forward.y = 0;
 
-        var
 
         //앞뒤 움직임
         transform.position += transform.forward
@@ -49,6 +48,6 @@ public class PlayerMovement : MonoBehaviour {
         float enter;
         plane.Raycast(ray,out enter);
         var point = ray.GetPoint(enter);
-        transform.LookAt
+        transform.LookAt(transform.position);
     }
 }
